@@ -1,28 +1,33 @@
 <script setup>
 import { ref, defineProps } from "vue";
 
-defineProps({ todos: Object });
+defineProps({ todos: Object, id: Number });
 const newTodo = ref("");
-const isEditing = null;
 
-const toggleEdit = (todo) => {
-  todo.value.isEditing = !todo.value.isEditing;
-};
+// const toggleEdit = (todo) => {
+//   todo.value.isEditing = !todo.value.isEditing;
+// };
 </script>
 
 <template>
   <li>
     <div class="todo">
-      <span> {{ todos.todo }}</span>
+      <span
+        @click="$emit('complete-todo', id)"
+        :class="{
+          'completed-todo': todos.isCompleted,
+        }"
+        >{{ todos.todo }}</span
+      >
 
       <div class="actions">
-        <button @click="$emit('delete-todo', todos.todo)">delete</button>
+        <button @click="$emit('delete-todo', id)">delete</button>
 
         <button @click="toggleEdit(todos.todo)">Edit</button>
         <input
-          v-if="isEditing"
+          v-if="false"
           type="text"
-          @input="$emit('edit-todo', [newTodo, todosvalue.indexOf(todos.todo)])"
+          @input="$emit('edit-todo', { newValue: newTodo, id: id })"
         />
       </div>
     </div>
@@ -34,15 +39,18 @@ li {
   height: 50px;
   width: 300px;
   list-style-type: none;
-  margin: 0;
+  margin: 0 15px 0 15px;
   padding: 0;
+
   .todo {
     display: flex;
     justify-content: center;
 
+    .completed-todo {
+      text-decoration: line-through;
+    }
+
     span {
-      background-color: lightgrey;
-      border-radius: 15px;
       padding: 5px;
       margin: auto auto auto 0px;
       justify-content: space-between;
@@ -58,6 +66,7 @@ li {
       justify-content: center;
       align-items: center;
       button {
+        height: 100%;
         margin: 0px 0px 0px auto;
         border: none;
         color: grey;
@@ -65,6 +74,9 @@ li {
         text-decoration: none;
         display: inline-block;
         text-transform: uppercase;
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
   }

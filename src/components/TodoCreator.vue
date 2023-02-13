@@ -1,31 +1,35 @@
 <template>
   <div class="input-list">
-    <input @input="handleChange" type="text" v-model="todo" />
-    <button @click="valid ? $emit('create-todo', todo) : notValid">
-      create
-    </button>
+    <input type="text" v-model="todo" />
+    <button @click="callEmit">create</button>
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 const todo = ref("");
-var valid = false;
-const handleChange = () => {
-  console.log("test");
-  if (todo.value !== "") {
-    valid = true;
-  } else {
-    valid = false;
-  }
+// var valid = false;
+
+const emit = defineEmits(["create-todo"]);
+const callEmit = () => {
+  console.log("fire");
+  emit("create-todo", todo.value);
 };
+// const handleChange = () => {
+//   if (todo.value !== "") {
+//     valid = true;
+//   } else {
+//     valid = false;
+//   }
+// };
 </script>
 
 <style lang="scss" scoped>
 .input-list {
   input {
+    margin: 5px;
     border: none;
-    background-color: #3cbc8d;
-    color: white;
+    background-color: #e9e9ed;
+    color: black;
   }
   &.input-err {
     border-color: red;

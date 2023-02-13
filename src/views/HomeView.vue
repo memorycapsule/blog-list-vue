@@ -1,30 +1,45 @@
 <template>
-  <div class="home">
-    <TodoCreator @create-todo="createTodo" />
-    <ul class="todo-list" v-if="todoList.length > 0">
-      <TodoItem
-        v-for="todo in todoList"
-        :todos="todo"
-        :key="todo.id"
-        @delete-todo="deleteTodo"
-        @edit-todo="editTodo"
-      />
-    </ul>
-    <p v-else class="todos-msg">
-      <span>Add some todo's to complete!</span>
-    </p>
+  <div class="contain">
+    <div class="home">
+      <TodoCreator @create-todo="createTodo" />
+      <ul class="todo-list" v-if="todoList.length > 0">
+        <TodoItem
+          v-for="(todo, index) in todoList"
+          :todos="todo"
+          :key="index"
+          :id="index"
+          @delete-todo="deleteTodo"
+          @edit-todo="editTodo"
+          @complete-todo="completeTodo"
+        />
+      </ul>
+      <p v-else class="todos-msg">
+        <span>Add some todo's to complete!</span>
+      </p>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
+.contain {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
 .home {
+  border: 1px solid;
+  box-shadow: 1px 1px black;
+  min-width: 400px;
+  max-height: 300px;
+  overflow-y: scroll;
   .todo-list {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
     align-items: center;
   }
   ul {
     display: flex;
+    padding: 5px 0 0 0;
+    margin: 0;
     justify-content: center;
     overflow-y: scroll;
     flex-direction: column;
@@ -41,21 +56,23 @@ import { ref } from "vue";
 const todoList = ref([]);
 const createTodo = (todo) => {
   todoList.value.push({
-    id: todoList.value.length,
     todo: todo,
     isCompleted: false,
-    isEditing: false,
   });
   console.log(todoList.value);
 };
 
-const deleteTodo = (todo) => {
+const deleteTodo = (id) => {
   console.log("deletefunc");
-  todoList.value.splice(todoList.value.indexOf(todo), 1);
+  todoList.value.splice(id, 1);
   console.log(todoList.value);
 };
 
 const editTodo = (todo) => {
-  console.log(todo);
+  console.log(todo.id);
+};
+
+const completeTodo = (id) => {
+  todoList.value[id].isCompleted = !todoList.value[id].isCompleted;
 };
 </script>
