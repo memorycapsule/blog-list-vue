@@ -21,8 +21,10 @@
 </template>
 <style lang="scss" scoped>
 .contain {
+  margin-top: 15vh;
   width: 100vw;
   height: 100vh;
+  transform: scale(1.25);
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -59,17 +61,17 @@ const createTodo = (todo) => {
     todo: todo,
     isCompleted: false,
   });
-  console.log(todoList.value);
 };
 
 const deleteTodo = (id) => {
-  console.log("deletefunc");
   todoList.value.splice(id, 1);
-  console.log(todoList.value);
 };
 
-const editTodo = (todo) => {
-  console.log(todo.id);
+const editTodo = (id, todo) => {
+  if (todo !== "") {
+    todoList.value[id].todo = todo;
+    console.log(todoList.value[id]);
+  }
 };
 
 const completeTodo = (id) => {

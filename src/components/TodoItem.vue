@@ -1,34 +1,31 @@
 <script setup>
 import { ref, defineProps } from "vue";
-
-defineProps({ todos: Object, id: Number });
 const newTodo = ref("");
-
-// const toggleEdit = (todo) => {
-//   todo.value.isEditing = !todo.value.isEditing;
-// };
+defineProps({ todos: Object, id: Number });
+const toggleEdit = (todo) => {
+  todo.isEditing = !todo.isEditing;
+};
 </script>
 
 <template>
   <li>
     <div class="todo">
       <span
+        v-if="!todos.isEditing"
         @click="$emit('complete-todo', id)"
         :class="{
           'completed-todo': todos.isCompleted,
         }"
         >{{ todos.todo }}</span
       >
-
+      <input
+        v-if="todos.isEditing"
+        v-model="newTodo"
+        @change="$emit('edit-todo', id, newTodo), toggleEdit(todos)"
+      />
       <div class="actions">
         <button @click="$emit('delete-todo', id)">delete</button>
-
-        <button @click="toggleEdit(todos.todo)">Edit</button>
-        <input
-          v-if="false"
-          type="text"
-          @input="$emit('edit-todo', { newValue: newTodo, id: id })"
-        />
+        <button @click="toggleEdit(todos)">Edit</button>
       </div>
     </div>
   </li>
@@ -51,6 +48,17 @@ li {
     }
 
     span {
+      padding: 5px;
+      margin: auto auto auto 0px;
+      justify-content: space-between;
+      font-weight: bold;
+      color: #2c3e50;
+      overflow-y: scroll;
+      overflow-x: auto;
+      column-span: all;
+    }
+
+    input {
       padding: 5px;
       margin: auto auto auto 0px;
       justify-content: space-between;
